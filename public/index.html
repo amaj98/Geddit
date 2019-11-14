@@ -12,6 +12,7 @@
     <script defer src="/__/firebase/7.3.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/7.3.0/firebase-database.js"></script>
     <script defer src="/__/firebase/7.3.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -20,14 +21,24 @@
     <script type= 'text/javascript' src="index.js"></script>
 
   </head>
+
   <body>
     <div class = "navbar navbar-expand-lg header">Geddit</div>
     <data></data>
+    <h2>People Online:</h2>
+    <ul id="people"></ul>
+    <div id="namestuff">
+      <input type="text" id="myname" placeholder="Hi, my name is" />
+      <button type="button" id="join">Click to join</button>
+      <button type="button" id="leave">Click to leave</button>
+      <button type="button" id="edit">Click to change your name</button>
+    </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         ready();
       });
+
     </script>
   </body>
 </html>
