@@ -14,13 +14,7 @@ var ready = ()=>{
         var db = firebase.database();
         var ref = db.ref("geddittest");
         ref.once("value",function(snapshot){
-            console.log(snapshot.val());
-        });
-
-        var subRef = ref.child("subgeddit");
-        subRef.set({
-            name: "testsubreddit",
-            posts:"postid1,postid2"
+            console.log(JSON.stringify(snapshot.val()));
         });
             
 }

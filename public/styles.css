@@ -1,0 +1,11 @@
+body,html{
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    background-color: rgba(161, 25, 7, 0.623);
+    color: rgb(0, 0, 0,1);
+    height: 10vh;
+    font-size: 36px;
+}
