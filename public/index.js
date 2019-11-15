@@ -18,14 +18,15 @@ var ready = ()=>{
     });
     var myid = "";
 
-
-var provider = new firebase.auth.GoogleAuthProvider();
+    var googleLogin =()=>{
+        var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         myid = user["uid"];
+        console.log("TOKEN: " + token);
         console.log("User :" + user["uid"]);
         $("#authstuff").html(`<h1>Welcome ${user.displayName}</h1><p><img src="${user.photoURL}"></p>`);
     }).catch(function(error) {
@@ -37,6 +38,8 @@ var provider = new firebase.auth.GoogleAuthProvider();
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
     });
+    }
+
 
     $("#join").click(function(){ //CREATE
         var name = $("#myname").val();
@@ -55,6 +58,15 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
         if (!!name){
             db.ref("people").child(myid).update({name: name});
+        }
+    });
+
+    $("#postgoGeddit").click(function(){ //UPDATE
+        if (firebase.auth().currentUser){
+            alert("You're IN");
+        }
+        else {
+            googleLogin();
         }
     });
 
