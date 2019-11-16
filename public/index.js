@@ -109,7 +109,7 @@ var ready = () => {
 }
 
 var startGo = () => {
+    var gogeddit = decodeURI(window.location.href.split('/').pop())
     $("body").empty();
-
-    $("body").text("welcome to " + decodeURI(window.location.href.split('/').pop()));
+    $("body").text("welcome to " + gogeddit);
 }
