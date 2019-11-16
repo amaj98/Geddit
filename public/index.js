@@ -91,9 +91,9 @@ var ready = ()=>{
     $("#postGoGeddit").click(function(){ //UPDATE
         var top = $("#goGedditName").val();
         var desc = $("#goGedditDesc").val();
-        if (topic && desciption){
+        if (top && desc){
             alert("success");
-            db.ref().child("goGeddits/"+TOPIC).push({name: top, desciption: desc, owner: myid});
+            db.ref().child("goGeddits/"+top).set({desciption: desc, owner: myid});
             document.getElementById("goGedditStuffStuff").style.display = 'none';
         }
         else{
