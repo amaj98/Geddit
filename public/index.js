@@ -62,27 +62,7 @@ var ready = ()=>{
         var credential = error.credential;
     });
     }
-    // BUTTON STUFF //
-    $("#join").click(function(){ //CREATE
-        var name = $("#myname").val();
 
-        if (name){
-            db.ref().child("people/"+myid).set({name: name, online: true});
-            db.ref("people").once("value",(snapshot)=>console.log(JSON.stringify(snapshot)));
-        }
-    });
-
-    $("#leave").click(function(){ //DESTROY
-        db.ref("people/"+myid).remove();
-    });
-
-    $("#edit").click(function(){ //UPDATE
-        var name = $("#myname").val();
-
-        if (!!name){
-            db.ref("people").child(myid).update({name: name});
-        }
-    });
 
     $("#createGoGeddit").click(function(){ //UPDATE
         if (firebase.auth().currentUser){
