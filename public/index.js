@@ -12,15 +12,34 @@ var ready = ()=>{
     // LOGIN STUFF //
     let app = firebase.app();
     var db = firebase.database();
-    var ref = db.ref("geddittest");
-    ref.once("value",function(snapshot){
-        console.log(JSON.stringify(snapshot.val()));
-    });
+    
 
-    myid = "";
+    var myid = "";
+    var username = "";
     firebase.auth().onAuthStateChanged((user)=>{
         myid = user["uid"];
-        console.log(myid);
+        
+        db.ref("gedders/"+myid).once("value",(snapshot)=>{
+            if(snapshot) username = snapshot.child("name").val();
+        
+            else{ 
+                username =  user["name"].split('@')[0]
+                db.ref().child("gedders/"+myid).set({name:username});
+            }
+            $("#settingsmsg").text("logged in as: "+username);
+            $("#usernamein").val(username);
+            $("#userbutton").text("Settings");
+            $("#userbutton").unbind();
+            $("#userbutton").click(()=>$(".usersettings").toggle());
+        });
+
+    });
+
+    $("#editname").click(()=>{
+        
+        let namein = $("#usernamein").val();
+        if(namein) db.ref("gedders").child(myid).update({name: namein});
+        $("#settingsmsg").text("logged in as: "+namein);
     });
 
     var googleLogin =()=>{
@@ -31,9 +50,8 @@ var ready = ()=>{
         // The signed-in user info.
         var user = result.user;
         myid = user["uid"];
-        console.log("TOKEN: " + token);
-        console.log("User :" + user["uid"]);
-        $("#authstuff").html(`<h1>Welcome ${user.displayName}</h1><p><img src="${user.photoURL}"></p>`);
+        
+
     }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -44,19 +62,6 @@ var ready = ()=>{
         var credential = error.credential;
     });
     }
-
-    db.ref("people").on("value", function(snap){
-        $("#people").empty();
-        var everyone = snap.val();
-
-        for(var id in everyone){
-            if (everyone.hasOwnProperty(id)){
-            let yourname = everyone[id].name || "anonymous";
-            $("#people").append(`<li>${yourname}</li>`);
-            }
-        }
-    });
-
     // BUTTON STUFF //
     $("#join").click(function(){ //CREATE
         var name = $("#myname").val();
@@ -91,9 +96,9 @@ var ready = ()=>{
     $("#postGoGeddit").click(function(){ //UPDATE
         var top = $("#goGedditName").val();
         var desc = $("#goGedditDesc").val();
-        if (topic && desciption){
+        if (top && desc){
             alert("success");
-            db.ref().child("goGeddits/"+TOPIC).push({name: top, desciption: desc, owner: myid});
+            db.ref().child("goGeddits/"+top).set({desciption: desc, owner: myid});
             document.getElementById("goGedditStuffStuff").style.display = 'none';
         }
         else{
@@ -101,26 +106,9 @@ var ready = ()=>{
         }
     });
 
-    $("#loginButton").click(function(){ //UPDATE
-        if (firebase.auth().currentUser){
-            alert("You're Already Logged in");
-            console.log(user);
-        }
-        else {
-            googleLogin();
-        }
-    });
-    $("#userSettings").click(function(){ //UPDATE
-        if(document.getElementById("namestuff").style.display == 'none')
-        {
-            document.getElementById("namestuff").style.display ='';
-        }
-        else
-        {
-            document.getElementById("namestuff").style.display = 'none';
-        }
-    });
-
+    $("#userbutton").click(()=>{
+        googleLogin();
+    })
 
     // FUNCTIONS //
     var createGoGeddit =(TOPIC, DESCRIPTION)=>{
