@@ -16,7 +16,7 @@
       },
       {
         "source": "go/**",
-        "destination": "go.html"
+        "destination": "/go.html"
       }
     ]
   }

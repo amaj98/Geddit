@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Geddit</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.3.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.3.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.3.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.3.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <link rel="stylesheet" type="text/css" href="../styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type= 'text/javascript' src="../index.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class = "navbar navbar-expand-lg header">Geddit
+      <button type="button" class="btn btn-danger" id = "userbutton">Login</button>
+    </div>
+    <div class = "usersettings" style="display:none">
+      <div id = "settingsmsg"></div>
+      <input type = "text" id = "usernamein"/>
+      <button type = "button" class = "btn btn-warning" id = "editname">edit name</button>
+    </div>
+    <div id="goGedditStuff">
+      <button type="button" class="btn btn-primary" id = "createGoGeddit">Create goGeddit</button>
+      <div id="goGedditStuffStuff" style="display: none"> 
+          <input type="text" id="goGedditName" placeholder="Name/Topic for your goGeddit" />
+          <input type="text" id="goGedditDesc" placeholder="Desciption for your goGeddit" />
+          <button type="button" class="btn btn-success" id = "postGoGeddit">Post goGeddit</button>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(()=>startGo());
+    </script>
+  </body>
+</html>

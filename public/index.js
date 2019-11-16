@@ -18,7 +18,7 @@ var ready = ()=>{
     var username = "";
     firebase.auth().onAuthStateChanged((user)=>{
         myid = user["uid"];
-        
+        console.log("auth change");
         db.ref("gedders/"+myid).once("value",(snapshot)=>{
             if(snapshot) username = snapshot.child("name").val();
         
@@ -64,31 +64,27 @@ var ready = ()=>{
     }
 
 
-    $("#createGoGeddit").click(function(){ //UPDATE
-        if (firebase.auth().currentUser){
-            document.getElementById("goGedditStuffStuff").style.display ='';
-        }
-        else {
-            googleLogin();
-        }
-    });
+    $("#createGoGeddit").click(()=> firebase.auth().currentUser? $("#goGedditStuffStuff").toggle():googleLogin());
 
     $("#postGoGeddit").click(function(){ //UPDATE
         var top = $("#goGedditName").val();
         var desc = $("#goGedditDesc").val();
         if (top && desc){
-            alert("success");
             db.ref().child("goGeddits/"+top).set({desciption: desc, owner: myid});
-            document.getElementById("goGedditStuffStuff").style.display = 'none';
+            $("#goGedditStuffStuff").toggle();
         }
         else{
             alert("Please fill in all fields.")
         }
+
+        db.ref().child("goGeddits").once('value',(snapshot)=> snapshot.forEach((child)=>console.log(JSON.stringify(child))));
     });
+
+
 
     $("#userbutton").click(()=>{
         googleLogin();
-    })
+    });
 
     // FUNCTIONS //
     var createGoGeddit =(TOPIC, DESCRIPTION)=>{
@@ -96,4 +92,9 @@ var ready = ()=>{
         document.getElementById("goGedditStuffStuff").style.display = 'none';
     }
 
+}
+
+var startGo = ()=>{
+    $("body").empty();
+    $("body").text('gogeddit');
 }
