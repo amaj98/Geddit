@@ -9,7 +9,7 @@ var ready = ()=>{
     //
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-    
+    // LOGIN STUFF //
     let app = firebase.app();
     var db = firebase.database();
     var ref = db.ref("geddittest");
@@ -45,7 +45,19 @@ var ready = ()=>{
     });
     }
 
+    db.ref("people").on("value", function(snap){
+        $("#people").empty();
+        var everyone = snap.val();
 
+        for(var id in everyone){
+            if (everyone.hasOwnProperty(id)){
+            let yourname = everyone[id].name || "anonymous";
+            $("#people").append(`<li>${yourname}</li>`);
+            }
+        }
+    });
+
+    // BUTTON STUFF //
     $("#join").click(function(){ //CREATE
         var name = $("#myname").val();
 
@@ -67,27 +79,52 @@ var ready = ()=>{
         }
     });
 
-    $("#postgoGeddit").click(function(){ //UPDATE
+    $("#createGoGeddit").click(function(){ //UPDATE
         if (firebase.auth().currentUser){
-            alert("You're IN");
+            document.getElementById("goGedditStuffStuff").style.display ='';
         }
         else {
             googleLogin();
         }
     });
 
-
-
-    db.ref("people").on("value", function(snap){
-        $("#people").empty();
-        var everyone = snap.val();
-
-        for(var id in everyone){
-            if (everyone.hasOwnProperty(id)){
-            let yourname = everyone[id].name || "anonymous";
-            $("#people").append(`<li>${yourname}</li>`);
-            }
+    $("#postGoGeddit").click(function(){ //UPDATE
+        var topic = $("#goGedditName").val();
+        var desciption = $("#goGedditDesc").val();
+        if (topic && desciption){
+            alert("success");
+            document.getElementById("goGedditStuffStuff").style.display = 'none';
+        }
+        else{
+            alert("Please fill in all fields.")
         }
     });
-            
+
+    $("#loginButton").click(function(){ //UPDATE
+        if (firebase.auth().currentUser){
+            alert("You're Already Logged in");
+            console.log(user);
+        }
+        else {
+            googleLogin();
+        }
+    });
+    $("#userSettings").click(function(){ //UPDATE
+        if(document.getElementById("namestuff").style.display == 'none')
+        {
+            document.getElementById("namestuff").style.display ='';
+        }
+        else
+        {
+            document.getElementById("namestuff").style.display = 'none';
+        }
+    });
+
+
+    // FUNCTIONS //
+    var createGoGeddit =(TOPIC, DESCRIPTION)=>{
+        db.ref().child("goGeddits/"+TOPIC).push({name: TOPIC, desciption: DESCRIPTION, owner: myid});
+        document.getElementById("goGedditStuffStuff").style.display = 'none';
+    }
+
 }
