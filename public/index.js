@@ -110,5 +110,6 @@ var ready = () => {
 
 var startGo = () => {
     $("body").empty();
-    $("body").text('gogeddit');
+
+    $("body").text("welcome to " + decodeURI(window.location.href.split('/').pop()));
 }
