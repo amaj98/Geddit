@@ -16,7 +16,12 @@ var ready = ()=>{
     ref.once("value",function(snapshot){
         console.log(JSON.stringify(snapshot.val()));
     });
-    var myid = "";
+
+    myid = "";
+    firebase.auth().onAuthStateChanged((user)=>{
+        myid = user["uid"];
+        console.log(myid);
+    });
 
     var googleLogin =()=>{
         var provider = new firebase.auth.GoogleAuthProvider();
@@ -44,8 +49,9 @@ var ready = ()=>{
     $("#join").click(function(){ //CREATE
         var name = $("#myname").val();
 
-        if (!!name){
+        if (name){
             db.ref().child("people/"+myid).set({name: name, online: true});
+            db.ref("people").once("value",(snapshot)=>console.log(JSON.stringify(snapshot)));
         }
     });
 
