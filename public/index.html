@@ -23,18 +23,25 @@
   </head>
 
   <body>
+    <button type="button" class="btn btn-light" id = "loginButton">Login</button>
+    <button type="button" class="btn btn-light" id = "userSettings">Toggle User Settings</button>
     <div class = "navbar navbar-expand-lg header">Geddit</div>
     <data></data>
     <h2>People Online:</h2>
     <ul id="people"></ul>
-    <div id="namestuff">
+    <div id="namestuff" style="DISPLAY: none">
       <input type="text" id="myname" placeholder="Hi, my name is" />
       <button type="button" id="join">Click to join</button>
       <button type="button" id="leave">Click to leave</button>
       <button type="button" id="edit">Click to change your name</button>
     </div>
-    <div id="postStuff">
-      <button type="button" class="btn btn-primary" id = "postgoGeddit">Create Subgeddit</button>
+    <div id="goGedditStuff">
+      <button type="button" class="btn btn-primary" id = "createGoGeddit">Create goGeddit</button>
+      <div id="goGedditStuffStuff" style="DISPLAY: none"> 
+          <input type="text" id="goGedditName" placeholder="Name/Topic for your goGeddit" />
+          <input type="text" id="goGedditDesc" placeholder="Desciption for your goGeddit" />
+          <button type="button" class="btn btn-success" id = "postGoGeddit">Post goGeddit</button>
+      </div>
     </div>
 
     <script>

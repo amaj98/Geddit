@@ -89,10 +89,11 @@ var ready = ()=>{
     });
 
     $("#postGoGeddit").click(function(){ //UPDATE
-        var topic = $("#goGedditName").val();
-        var desciption = $("#goGedditDesc").val();
+        var top = $("#goGedditName").val();
+        var desc = $("#goGedditDesc").val();
         if (topic && desciption){
             alert("success");
+            db.ref().child("goGeddits/"+TOPIC).push({name: top, desciption: desc, owner: myid});
             document.getElementById("goGedditStuffStuff").style.display = 'none';
         }
         else{
