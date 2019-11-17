@@ -19,9 +19,7 @@ var readyAll = ()=>{
 
     var username = "";
     firebase.auth().onAuthStateChanged((user) => {
-        console.log(JSON.stringify(user));
         myid = user["uid"];
-        console.log("auth change");
         db.ref("gedders/" + myid).once("value", (snapshot) => {
             if (snapshot) username = snapshot.child("name").val();
 
@@ -145,12 +143,25 @@ var readyGo = () => {
             <h5 class="card-title">${child.key}</h5>
             <p class="card-text">${child.val().body}</p>
             <a href="/go/${gogeddit}/${child.key}" class="btn btn-primary">Go</a>
+            <p></p>
+            <button type = "button" class = "btn btn-success" id = "U${child.key}">GoUp</button>
+            <button type = "button" class = "btn btn-danger" id = "D${child.key}">GoDown</button>
+            <p></p>
+            <div class="badge badge-pill badge-dark" style = "font-size:16px;" id = "NV${child.key}"></div>
             </div>
             <div class="card-footer text-muted">
             post by ${snapshot.val().name}
             </div>
         </div>`
             )
+            //"#U"+key is the id for upvote button for post with that key
+            //D is downvote button
+            //NV is number of votes
+
+            $("#U"+child.key).click(()=>console.log('upvoted post'));
+            $("#D"+child.key).click(()=>console.log('downvoted post'));
+            $("#NV"+child.key).text("5");
+            //placeholders, These should add the user to voters, and change that number accordingly
         });
     }));
 }
