@@ -23,7 +23,7 @@
   </head>
   <body>
 
-    <div class = "navbar navbar-expand-lg header">Geddit
+    <div class = "navbar navbar-expand-lg header">
       <button type="button" class="btn btn-danger" id = "userbutton">Login</button>
     </div>
     <div class = "usersettings" style="display:none">
@@ -31,8 +31,24 @@
       <input type = "text" id = "usernamein"/>
       <button type = "button" class = "btn btn-warning" id = "editname">edit name</button>
     </div>
+    <div class = "PostStuff">
+      <button type = "button" class = "btn btn-primary" id = "postbutton">Create Post</button>
+      <form class = "createPost" style = "display:none">
+        <div class = "form-group">
+          <label for = "postTitle">Post Title</label>
+          <input type = "text" id = "postTitle" placeholder= "Title of Post"/>
+        </div>
+        <div class = "form-group">
+        <textarea type = "text" id = "postBody" rows ="10" cols = "50"></textarea>
+        </div>
+        <button type = "button" class = "btn btn-success" id = "submitPost">Submit Post</button>
+    </form>
+    </div>
     <script>
-      $(document).ready(()=>startGo());
+      $(document).ready(()=>{
+        readyAll();
+        readyGo(); 
+      });
     </script>
   </body>
 </html>

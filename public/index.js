@@ -1,5 +1,8 @@
-var ready = () => {
-    // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+var app;
+var db;
+
+var readyAll = ()=>{
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
     // // The Firebase SDK is initialized and available here!
     //
     // firebase.auth().onAuthStateChanged(user => { });
@@ -10,8 +13,8 @@ var ready = () => {
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
     // LOGIN STUFF //
-    let app = firebase.app();
-    var db = firebase.database();
+    app = firebase.app();
+    db = firebase.database();
 
 
     var myid = "";
@@ -62,8 +65,10 @@ var ready = () => {
             var credential = error.credential;
         });
     }
+    $("#userbutton").click(() => googleLogin());
+}
 
-
+var readyHome = () => {
     $("#createGoGeddit").click(() => firebase.auth().currentUser ? $("#goGedditStuffStuff").toggle() : googleLogin());
 
     $("#postGoGeddit").click(function () { //UPDATE
@@ -79,11 +84,6 @@ var ready = () => {
 
     });
 
-
-
-    $("#userbutton").click(() => {
-        googleLogin();
-    });
 
     // FUNCTIONS //
     var createGoGeddit = (TOPIC, DESCRIPTION) => {
@@ -108,8 +108,17 @@ var ready = () => {
     }));
 }
 
-var startGo = () => {
+var readyGo = () => {
     var gogeddit = decodeURI(window.location.href.split('/').pop())
-    $("body").empty();
-    $("body").text("welcome to " + gogeddit);
+    let goref = db.ref("goGeddits/"+gogeddit);
+    $(".header").prepend(gogeddit);
+    $("#postbutton").click(()=>$(".createPost").toggle());
+    $('#submitPost').click(()=>{
+        let title = $('#postTitle').val()
+        let bod = $('#postBody').val()
+        if(title && bod){
+            goref.child("posts/" + title).set({body:bod})
+        }
+        else alert("Invalid Post");
+    });
 }
