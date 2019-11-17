@@ -147,7 +147,7 @@ var readyGo = () => {
             <button type = "button" class = "btn btn-success" id = "U${child.key}">GoUp</button>
             <button type = "button" class = "btn btn-danger" id = "D${child.key}">GoDown</button>
             <p></p>
-            <div class="badge badge-pill badge-dark" style = "font-size:16px;" id = "NV${child.key}"></div>
+            <div class="badge badge-pill badge-dark" style = "font-size:16px;" id = "NV${child.key}">0</div>
             </div>
             <div class="card-footer text-muted">
             post by ${snapshot.val().name}
@@ -158,10 +158,55 @@ var readyGo = () => {
             //D is downvote button
             //NV is number of votes
 
-            $("#U"+child.key).click(()=>console.log('upvoted post'));
-            $("#D"+child.key).click(()=>console.log('downvoted post'));
-            $("#NV"+child.key).text("5");
-            //placeholders, These should add the user to voters, and change that number accordingly
+            //loop through voters for post and adds up vals, then sets sum in html
+            
+            goref.child("posts/"+child.key+"/voters").once("value",(snapshot)=>
+                snapshot.forEach((voter)=>{$("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) + voter.val());})
+            );
+            
+    
+            $("#U"+child.key).click(()=>{
+                goref.child("posts/"+child.key+"/voters/"+myid).once("value",(snapshot)=>{
+                    let v = snapshot.val();
+                    switch(v){
+                        case -1:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(1);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) + 2);
+                            break;
+                        case 0:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(1);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) + 1);
+                            break;
+                        case 1:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(0);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) - 1);
+                            break;    
+                    }
+                })
+            });
+
+            $("#D"+child.key).click(()=>{
+                goref.child("posts/"+child.key+"/voters/"+myid).once("value",(snapshot)=>{
+                    let v = snapshot.val();
+                    switch(v){
+                        case -1:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(0);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) + 1);
+                            break;
+                        case 0:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(-1);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) - 1);
+                            break;
+                        case 1:
+                            goref.child("posts/"+child.key+"/voters/"+myid).set(-1);
+                            $("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) - 2);
+                            break;    
+                    }
+                })
+            });
+
+
+
         });
     }));
 }
