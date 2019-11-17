@@ -1,5 +1,6 @@
 var app;
 var db;
+var myid;
 
 var readyAll = ()=>{
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -16,10 +17,9 @@ var readyAll = ()=>{
     app = firebase.app();
     db = firebase.database();
 
-
-    var myid = "";
     var username = "";
     firebase.auth().onAuthStateChanged((user) => {
+        console.log(JSON.stringify(user));
         myid = user["uid"];
         console.log("auth change");
         db.ref("gedders/" + myid).once("value", (snapshot) => {
@@ -117,8 +117,24 @@ var readyGo = () => {
         let title = $('#postTitle').val()
         let bod = $('#postBody').val()
         if(title && bod){
-            goref.child("posts/" + title).set({body:bod})
+            goref.child("posts/" + title).set({creator: myid, body:bod});
+            $(".createPost").toggle();
         }
         else alert("Invalid Post");
     });
+    goref.child("posts").once('value', (snapshot) => snapshot.forEach((child) => {
+        db.ref('gedders/' + child.val().creator).once('value', (snapshot) => {
+            $(".posts").append(`<div class="card text-center">
+            <div class="card-body">
+            <h5 class="card-title">${child.key}</h5>
+            <p class="card-text">${child.val().body}</p>
+            <a href="/go/${gogeddit}/${child.key}" class="btn btn-primary">Go</a>
+            </div>
+            <div class="card-footer text-muted">
+            post by ${snapshot.val().name}
+            </div>
+        </div>`
+            )
+        });
+    }));
 }
