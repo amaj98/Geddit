@@ -1,6 +1,26 @@
 var app;
 var db;
 var myid;
+var googleLogin = () => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        myid = user["uid"];
+
+
+    }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+    });
+}
 
 var readyAll = ()=>{
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -19,21 +39,22 @@ var readyAll = ()=>{
 
     var username = "";
     firebase.auth().onAuthStateChanged((user) => {
-        myid = user["uid"];
-        db.ref("gedders/" + myid).once("value", (snapshot) => {
-            if (snapshot) username = snapshot.child("name").val();
+        if (user){
+            myid = user["uid"];
+            db.ref("gedders/" + myid).once("value", (snapshot) => {
+                if (snapshot) username = snapshot.child("name").val();
 
-            else {
-                username = user["name"].split('@')[0]
-                db.ref().child("gedders/" + myid).set({ name: username });
-            }
-            $("#settingsmsg").text("logged in as: " + username);
-            $("#usernamein").val(username);
-            $("#userbutton").text("Settings");
-            $("#userbutton").unbind();
-            $("#userbutton").click(() => $(".usersettings").toggle());
-        });
-
+                else {
+                    username = user["name"].split('@')[0]
+                    db.ref().child("gedders/" + myid).set({ name: username });
+                }
+                $("#settingsmsg").text("logged in as: " + username);
+                $("#usernamein").val(username);
+                $("#userbutton").text("Settings");
+                $("#userbutton").unbind();
+                $("#userbutton").click(() => $(".usersettings").toggle());
+            });
+        }
     });
 
     $("#editname").click(() => {
@@ -47,26 +68,8 @@ var readyAll = ()=>{
         firebase.auth().signOut().then(()=>document.location.reload(true))
     });
 
-    var googleLogin = () => {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function (result) {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            var token = result.credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
-            myid = user["uid"];
+    console.log(firebase.auth().currentUser);
 
-
-        }).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-        });
-    }
     $("#userbutton").click(() => googleLogin());
 
     // Scroll Button Stuff //
@@ -131,7 +134,7 @@ var readyGo = () => {
     var gogeddit = decodeURI(window.location.href.split('/').pop())
     let goref = db.ref("goGeddits/"+gogeddit);
     $(".header").prepend(gogeddit);
-    $("#postbutton").click(()=>$(".createPost").toggle());
+    $("#postbutton").click(()=>firebase.auth().currentUser?$(".createPost").toggle():googleLogin());
     $('#submitPost').click(()=>{
         let title = $('#postTitle').val()
         let bod = $('#postBody').val()
@@ -224,7 +227,7 @@ var readyPost = () => {
     var gogeddit = decodeURI(window.location.href.split('/')[4]);
     let postref = db.ref("goGeddits/"+gogeddit+"/posts/"+post);
     $(".header").prepend(gogeddit);
-    $("#commentbutton").click(()=>$(".createComment").toggle());
+    $("#commentbutton").click(()=>firebase.auth().currentUser?$(".createComment").toggle():googleLogin());
     $('#submitComment').click(()=>{
         let bod = $('#commentBody').val()
         if(bod){
