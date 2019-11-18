@@ -15,17 +15,16 @@
     <script defer src="/__/firebase/init.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="../../../styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script type= 'text/javascript' src="index.js"></script>
+    <script type= 'text/javascript' src="../../../index.js"></script>
 
   </head>
-
+  
   <body>
-
     <button type="button" id="scrollButton">Top</button>
-    <div class = "navbar navbar-expand-lg header" id="lockBar">Geddit
+    <div class = "navbar navbar-expand-lg header">
       <button type="button" class="btn btn-danger" id = "userbutton">Login</button>
     </div>
     <div class = "usersettings" style="display:none">
@@ -33,22 +32,24 @@
       <input type = "text" id = "usernamein"/>
       <button type = "button" class = "btn btn-warning" id = "editname">edit name</button>
     </div>
-    <div id="goGedditStuff">
-      <button type="button" class="btn btn-primary" id = "createGoGeddit">Create goGeddit</button>
-      <div id="goGedditStuffStuff" style="display: none"> 
-          <input type="text" id="goGedditName" placeholder="Name/Topic for your goGeddit" />
-          <input type="text" id="goGedditDesc" placeholder="Desciption for your goGeddit" />
-          <button type="button" class="btn btn-success" id = "postGoGeddit">Post goGeddit</button>
-      </div>
+    <!-- Stuff to post comments -->
+    <div class = "post"></div>
+    <div class = "CommentStuff">
+      <button type = "button" class = "btn btn-primary" id = "commentbutton">Create Gottem</button>
+      <form class = "createComment" style = "display:none">
+        <div class = "form-group">
+        <textarea type = "text" id = "commentBody" rows ="10" cols = "50"></textarea>
+        </div>
+        <button type = "button" class = "btn btn-success" id = "submitComment">Submit Gottem</button>
+    </form>
     </div>
-    <div class = "gogeddits"></div>
 
+    <div class = "comments"></div>
     <script>
       $(document).ready(()=>{
         readyAll();
-        readyHome();
+        readyPost(); 
       });
-
     </script>
   </body>
 </html>

@@ -21,8 +21,10 @@
     <script type= 'text/javascript' src="../index.js"></script>
 
   </head>
+  
   <body>
 
+    <button type="button" id="scrollButton">Top</button>
     <div class = "navbar navbar-expand-lg header">
       <button type="button" class="btn btn-danger" id = "userbutton">Login</button>
     </div>
@@ -31,8 +33,9 @@
       <input type = "text" id = "usernamein"/>
       <button type = "button" class = "btn btn-warning" id = "editname">edit name</button>
     </div>
+    <!-- Stuff to create posts -->
     <div class = "PostStuff">
-      <button type = "button" class = "btn btn-primary" id = "postbutton">Create Post</button>
+      <button type = "button" class = "btn btn-primary" id = "postbutton">Create Gettem</button>
       <form class = "createPost" style = "display:none">
         <div class = "form-group">
           <label for = "postTitle">Post Title</label>
@@ -41,7 +44,7 @@
         <div class = "form-group">
         <textarea type = "text" id = "postBody" rows ="10" cols = "50"></textarea>
         </div>
-        <button type = "button" class = "btn btn-success" id = "submitPost">Submit Post</button>
+        <button type = "button" class = "btn btn-success" id = "submitPost">Submit Gettem</button>
     </form>
     </div>
     <div class = "posts"></div>

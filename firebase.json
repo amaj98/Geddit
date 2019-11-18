@@ -15,9 +15,14 @@
         "destination": "/index.html"
       },
       {
+        "source": "go/**/post/**",
+        "destination": "/post.html"
+      },
+      {
         "source": "go/**",
         "destination": "/go.html"
       }
+
     ]
   }
 }
