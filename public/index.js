@@ -43,6 +43,10 @@ var readyAll = ()=>{
         $("#settingsmsg").text("logged in as: " + namein);
     });
 
+    $("#logout").click(() => {
+        firebase.auth().signOut().then(()=>document.location.reload(true))
+    });
+
     var googleLogin = () => {
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function (result) {
@@ -77,6 +81,7 @@ var readyAll = ()=>{
     $("#scrollButton").click(() => {
         //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     });
 }
 
@@ -90,7 +95,6 @@ var readyHome = () => {
         if (top && desc) {
             db.ref().child("goGeddits/" + top).set({ desc: desc, owner: myid });
             $("#goGedditStuffStuff").toggle();
-            //document.location.reload();
             window.location.replace(window.location.href+"/go/"+top);
         }
         else {
@@ -113,7 +117,6 @@ var readyHome = () => {
             <h5 class="card-title">${child.key}</h5>
             <p class="card-text">${child.val().desc}</p>
             <a href="/go/${child.key}" class="btn btn-primary">Go</a>
-            <b id="deleteButton" class="btn btn-danger" > Delete </b>
             </div>
             <div class="card-footer text-muted">
             created by ${snapshot.val().name}
@@ -133,7 +136,7 @@ var readyGo = () => {
         let title = $('#postTitle').val()
         let bod = $('#postBody').val()
         if(title && bod){
-            goref.child("posts/" + title).set({creator: myid, body:bod});
+            goref.child("posts/").push({creator: myid, title: title, body:bod});
             $(".createPost").toggle();
             document.location.reload();
         }
@@ -143,9 +146,9 @@ var readyGo = () => {
         db.ref('gedders/' + child.val().creator).once('value', (snapshot) => {
             $(".posts").append(`<div class="card text-center">
             <div class="card-body">
-            <h5 class="card-title">${child.key}</h5>
-            <p class="card-text">${child.val().body}</p>
-            <a href="/go/${gogeddit}/post/${child.key}" class="btn btn-primary">Go</a>
+            <h5 class="card-title">${child.val().title}</h5>
+            <p class="card-text">${child.val().body.length<1000?child.val().body:child.val().body.slice(0,1000)+'...'}</p>
+            <a href="/go/${gogeddit}/post/${child.key}" class="btn btn-primary">GoGettem</a>
             <p></p>
             <button type = "button" class = "btn btn-success" id = "U${child.key}">GoUp</button>
             <button type = "button" class = "btn btn-danger" id = "D${child.key}">GoDown</button>
@@ -167,8 +170,9 @@ var readyGo = () => {
                 snapshot.forEach((voter)=>{$("#NV"+child.key).text(parseInt($("#NV"+child.key).text()) + voter.val());})
             );
             
-    
+            
             $("#U"+child.key).click(()=>{
+                
                 goref.child("posts/"+child.key+"/voters/"+myid).once("value",(snapshot)=>{
                     let v = snapshot.val()?snapshot.val():0;
                     switch(v){
@@ -191,6 +195,7 @@ var readyGo = () => {
             $("#D"+child.key).click(()=>{
                 goref.child("posts/"+child.key+"/voters/"+myid).once("value",(snapshot)=>{
                     let v = snapshot.val()?snapshot.val():0;
+                    console.log(v);
                     switch(v){
                         case -1:
                             goref.child("posts/"+child.key+"/voters/"+myid).set(0);
@@ -218,7 +223,7 @@ var readyPost = () => {
     var post = decodeURI(window.location.href.split('/').pop());
     var gogeddit = decodeURI(window.location.href.split('/')[4]);
     let postref = db.ref("goGeddits/"+gogeddit+"/posts/"+post);
-    $(".header").prepend(post);
+    $(".header").prepend(gogeddit);
     $("#commentbutton").click(()=>$(".createComment").toggle());
     $('#submitComment').click(()=>{
         let bod = $('#commentBody').val()
@@ -232,7 +237,7 @@ var readyPost = () => {
     postref.once('value',(snapshot)=>$(".post").append(`
     <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">${snapshot.key}</h1>
+    <h1 class="display-4">${snapshot.val().title}</h1>
     <p class="lead">${snapshot.val().body}</p>
   </div>
 </div>`));
@@ -265,7 +270,6 @@ var readyPost = () => {
             
             
             $("#U"+child.key).click(()=>{
-                console.log(child.key);
                 postref.child("comments/"+child.key+"/voters/"+myid).once("value",(snapshot)=>{
                     let v = snapshot.val()?snapshot.val():0;
                     switch(v){
