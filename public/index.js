@@ -42,12 +42,20 @@ var readyAll = ()=>{
         if (user){
             myid = user["uid"];
             db.ref("gedders/" + myid).once("value", (snapshot) => {
-                if (snapshot) username = snapshot.child("name").val();
-
+                if (snapshot){
+                    username = snapshot.child("name").val();
+                    if(!username){
+                        username = user["email"].split('@')[0]
+                        db.ref().child("gedders/" + myid).set({ name: username });
+                    }
+                } 
                 else {
-                    username = user["name"].split('@')[0]
+                    username = user["email"].split('@')[0]
                     db.ref().child("gedders/" + myid).set({ name: username });
                 }
+
+                
+                
                 $("#settingsmsg").text("logged in as: " + username);
                 $("#usernamein").val(username);
                 $("#userbutton").text("Settings");
